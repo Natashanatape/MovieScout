@@ -1,0 +1,9 @@
+⚠️  Redis disabled - Running without cache
+🔄 Running migrations...
+✅ Phase 4: Release reminders table created
+✅ All migrations completed!
+🚀 Server running on port 5001
+📝 Environment: development
+⏰ Reminder job scheduled: Daily at 9:00 AM
+⏰ Cleanup job scheduled: Daily at 12:00 AM
+⏰ Reminder cron jobs initialized

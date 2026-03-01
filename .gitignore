@@ -1,0 +1,16 @@
+# Root
+node_modules
+.env
+dist
+build
+
+# Frontend
+frontend/node_modules
+frontend/dist
+frontend/build
+
+# Backend
+backend/node_modules
+
+# Zip files (optional)
+*.zip
