@@ -1,7 +1,10 @@
 const express = require("express");
+const cors = require("cors"); // ✅ ADD THIS
 require("dotenv").config();
 
 const app = express();
+
+app.use(cors()); // ✅ ADD THIS (VERY IMPORTANT)
 
 app.get("/", (req, res) => {
   res.json({ message: "Backend running 🚀" });
