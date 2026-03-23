@@ -76,3 +76,8 @@ export const advancedSearchAPI = {
 };
 
 export default api;
+export const videoAPI = {
+  getFeatured: (params) => api.get('/videos/featured', { params }),
+  getLatest: (params) => api.get('/videos/latest', { params }),
+  getByMovie: (movieId, params) => api.get(`/videos/movie/${movieId}`, { params }),
+};
