@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+// 🔥 FINAL FIX (IMPORTANT)
+const API_URL =
+  process.env.REACT_APP_API_URL || "https://moviescout-i49z.onrender.com";
+
+// DEBUG (optional — baad me hata sakti hai)
+console.log("🚀 API URL:", API_URL);
 
 const api = axios.create({
   baseURL: API_URL,
@@ -27,17 +32,17 @@ export const authAPI = {
   resetPassword: (token, password) => api.post('/auth/reset-password', { token, password }),
 };
 
-// 🎬 MOVIE API (FIXED)
+// 🎬 MOVIE API (FINAL FIXED)
 export const movieAPI = {
   getAll: () => api.get('/movies'),
   getById: (id) => api.get(`/movies/${id}`),
   search: (query) => api.get('/movies/search', { params: { q: query } }),
 
-  // 🔥 IMPORTANT FIX
+  // 🔥 IMPORTANT — yehi use hoga
   getPopular: () => api.get('/movies'),
 
-  getTrending: () => api.get('/movies'), // temporary same endpoint
-  getByGenre: (genre) => api.get(`/movies`), // optional (backend me nahi hai abhi)
+  getTrending: () => api.get('/movies'),
+  getByGenre: (genre) => api.get('/movies'),
 };
 
 // ⭐ RATINGS
@@ -64,20 +69,22 @@ export const watchlistAPI = {
   check: (movieId) => api.get(`/watchlist/check/${movieId}`),
 };
 
-// 👤 CELEBRITY (optional, may not work fully)
+// 👤 CELEBRITY (optional)
 export const celebrityAPI = {
   getAll: () => api.get('/celebrities'),
   getById: (id) => api.get(`/celebrities/${id}`),
 };
 
-// 🔍 ADVANCED SEARCH (optional)
+// 🔍 ADVANCED SEARCH
 export const advancedSearchAPI = {
   search: () => api.get('/movies'),
 };
 
-export default api;
+// 🎥 VIDEOS (optional)
 export const videoAPI = {
   getFeatured: (params) => api.get('/videos/featured', { params }),
   getLatest: (params) => api.get('/videos/latest', { params }),
   getByMovie: (movieId, params) => api.get(`/videos/movie/${movieId}`, { params }),
 };
+
+export default api;
