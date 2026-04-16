@@ -19,7 +19,8 @@ const Watchlist = () => {
         navigate('/login');
         return;
       }
-      const res = await watchlistAPI.getWatchlist();
+      const res = await watchlistAPI.getAll();
+      console.log('Watchlist response:', res.data);
       setWatchlist(res.data || []);
     } catch (error) {
       console.error('Error:', error);
@@ -30,8 +31,8 @@ const Watchlist = () => {
 
   const handleRemove = async (movieId) => {
     try {
-      await watchlistAPI.removeFromWatchlist(movieId);
-      setWatchlist(watchlist.filter(item => item.id !== movieId));
+      await watchlistAPI.remove(movieId);
+      setWatchlist(watchlist.filter(item => item.movie_id !== movieId));
     } catch (error) {
       console.error('Error:', error);
     }
@@ -48,7 +49,7 @@ const Watchlist = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-white mb-8">My Watchlist</h1>
+        <h1 className="text-4xl font-bold text-white mb-8">Watchlist</h1>
         
         {watchlist.length === 0 ? (
           <div className="text-center py-20">
@@ -62,12 +63,12 @@ const Watchlist = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {watchlist.map((movie) => (
-              <div key={movie.id} className="relative">
-                <MovieCard movie={movie} />
+            {watchlist.map((item) => (
+              <div key={item.movie_id} className="relative">
+                <MovieCard movie={{id: item.movie_id, title: item.title, poster_url: item.poster_url, release_date: item.release_date, average_rating: item.average_rating}} />
                 <button
-                  onClick={() => handleRemove(movie.id)}
-                  className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600"
+                  onClick={() => handleRemove(item.movie_id)}
+                  className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 z-10"
                 >
                   ✕
                 </button>

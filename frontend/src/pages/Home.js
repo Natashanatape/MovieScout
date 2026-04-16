@@ -11,6 +11,7 @@ const Home = () => {
   const [trending, setTrending] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showRoulette, setShowRoulette] = useState(false);
+  const [totalMovies, setTotalMovies] = useState(0);
   const navigate = useNavigate();
 
   const handleFeelingLucky = () => {
@@ -24,8 +25,13 @@ const Home = () => {
       try {
         const moviesRes = await movieAPI.getAll();
         const allMovies = moviesRes.data || [];
-        setMovies(allMovies);
-        setTrending(allMovies.slice(0, 6));
+        
+        // Shuffle movies for variety
+        const shuffled = [...allMovies].sort(() => Math.random() - 0.5);
+        
+        setMovies(shuffled);
+        setTrending(shuffled.slice(0, 6));
+        setTotalMovies(allMovies.length);
       } catch (error) {
         console.error('Error fetching data:', error);
         setMovies([]);
@@ -82,7 +88,8 @@ const Home = () => {
                 </h1>
                 <p className="text-2xl text-purple-200 mb-6 max-w-2xl">
                   Swipe. Match. Watch. <br/>
-                  Find your perfect movie with AI & friends
+                  Find your perfect movie with AI & friends<br/>
+                  <span className="text-lg text-purple-300">📊 {totalMovies} movies available</span>
                 </p>
                 <div className="flex gap-4">
                   <Link 
@@ -118,87 +125,91 @@ const Home = () => {
         )}
 
         {/* New Releases Section */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-white mb-6">
-            New Releases
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {movies.slice(6, 12).map((movie) => (
-              <MovieCard key={movie.id} movie={movie} compact showRating={false} />
-            ))}
-          </div>
-        </section>
+        {movies.length > 6 && (
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold text-white mb-6">
+              New Releases
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {movies.slice(6, 12).map((movie) => (
+                <MovieCard key={movie.id} movie={movie} compact showRating={false} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* This Week's Highlights */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-white mb-6">
-            This Week's Highlights
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {movies.slice(2, 5).map((movie) => (
-              <Link key={movie.id} to={`/movie/${movie.id}`} className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 hover:shadow-2xl hover:shadow-purple-500/30 transition-all duration-300 transform hover:scale-105">
-                <div className="flex gap-4">
-                  <img src={movie.poster_url} alt={movie.title} className="w-20 h-28 object-cover rounded-lg" />
-                  <div className="flex-1">
-                    <h3 className="text-xl font-bold text-white mb-2">{movie.title}</h3>
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-yellow-400">⭐</span>
-                      <span className="text-white font-semibold">{movie.average_rating}</span>
+        {movies.length > 12 && (
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold text-white mb-6">
+              This Week's Highlights
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {movies.slice(12, 15).map((movie) => (
+                <Link key={movie.id} to={`/movie/${movie.id}`} className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 hover:shadow-2xl hover:shadow-purple-500/30 transition-all duration-300 transform hover:scale-105">
+                  <div className="flex gap-4">
+                    <img src={movie.poster_url || '/placeholder.jpg'} alt={movie.title} className="w-20 h-28 object-cover rounded-lg" />
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold text-white mb-2">{movie.title}</h3>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-yellow-400">⭐</span>
+                        <span className="text-white font-semibold">{movie.average_rating || 'N/A'}</span>
+                      </div>
+                      <p className="text-gray-400 text-sm line-clamp-3">{movie.description || 'No description available'}</p>
                     </div>
-                    <p className="text-gray-400 text-sm line-clamp-3">{movie.description}</p>
                   </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Popular Movies Section */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-white mb-6">
-            Popular Movies
-          </h2>
-          {movies.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-400 text-xl">No movies found. Loading...</p>
-            </div>
-          ) : (
+        {movies.length > 15 && (
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold text-white mb-6">
+              Popular Movies
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {movies.map((movie) => (
+              {movies.slice(15, 31).map((movie) => (
                 <MovieCard key={movie.id} movie={movie} />
               ))}
             </div>
-          )}
-        </section>
+          </section>
+        )}
 
         {/* Top Rated This Year */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-white mb-6">
-            Top Rated 2026
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {movies.slice(0, 4).map((movie, index) => (
-              <div key={movie.id} className="relative">
-                <div className="absolute top-4 left-4 bg-yellow-500 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm z-10">
-                  #{index + 1}
+        {movies.length > 31 && (
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold text-white mb-6">
+              Top Rated 2026
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+              {movies.slice(31, 35).map((movie, index) => (
+                <div key={movie.id} className="relative">
+                  <div className="absolute top-4 left-4 bg-yellow-500 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm z-10">
+                    #{index + 1}
+                  </div>
+                  <MovieCard movie={movie} />
                 </div>
-                <MovieCard movie={movie} />
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Hidden Gems */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-white mb-6">
-            Hidden Gems
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {movies.slice(3, 8).map((movie) => (
-              <MovieCard key={movie.id} movie={movie} compact showRating={false} />
-            ))}
-          </div>
-        </section>
+        {movies.length > 35 && (
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold text-white mb-6">
+              Hidden Gems
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {movies.slice(35, 40).map((movie) => (
+                <MovieCard key={movie.id} movie={movie} compact showRating={false} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Browse by Genre */}
         <section className="mt-16 mb-12">

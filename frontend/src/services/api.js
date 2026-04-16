@@ -26,7 +26,7 @@ export const authAPI = {
 };
 
 export const movieAPI = {
-  getAll: (params) => api.get('/movies', { params }),
+  getAll: (params) => api.get('/movies', { params: { ...params, _t: Date.now() } }),
   getById: (id) => api.get(`/movies/${id}`),
   search: (query) => api.get('/movies/search', { params: { q: query } }),
   getTrending: (params) => api.get('/movies/trending', { params }),

@@ -16,7 +16,7 @@ const TVShowDetail = () => {
 
   const fetchShowDetails = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/movies/${id}`);
+      const res = await axios.get(`http://localhost:5001/api/movies/${id}`);
       setShow(res.data);
       setLoading(false);
     } catch (error) {
@@ -27,7 +27,7 @@ const TVShowDetail = () => {
 
   const fetchVideos = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/videos/movie/${id}`);
+      const res = await axios.get(`http://localhost:5001/api/videos/movie/${id}`);
       setVideos(res.data);
     } catch (error) {
       console.error('Error:', error);

@@ -92,7 +92,30 @@ async function runMigrations() {
       );
     `);
 
-    // 6. Phase 4: Create release_reminders table
+    // 6. Create photos table
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS photos (
+        id SERIAL PRIMARY KEY,
+        movie_id INTEGER REFERENCES movies(id) ON DELETE CASCADE,
+        photo_url TEXT NOT NULL,
+        thumbnail_url TEXT,
+        category VARCHAR(50) DEFAULT 'poster',
+        caption TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    await db.query(`
+      CREATE INDEX IF NOT EXISTS idx_photos_movie ON photos(movie_id);
+    `);
+    
+    await db.query(`
+      CREATE INDEX IF NOT EXISTS idx_photos_category ON photos(category);
+    `);
+
+    console.log('✅ Photos table created');
+
+    // 7. Phase 4: Create release_reminders table
     await db.query(`
       CREATE TABLE IF NOT EXISTS release_reminders (
         id SERIAL PRIMARY KEY,

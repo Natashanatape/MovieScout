@@ -12,7 +12,7 @@ const TVShows = () => {
 
   const fetchTVShows = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/movies/tv-shows`);
+      const response = await axios.get('http://localhost:5001/api/movies/tv-shows');
       console.log('TV Shows Response:', response.data);
       setShows(response.data);
     } catch (error) {

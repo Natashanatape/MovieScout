@@ -10,7 +10,7 @@ const MovieCard = ({ movie, compact, showRating = true }) => {
     if (movie.poster_url && !imageError) {
       return movie.poster_url;
     }
-    return `https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300&h=450&fit=crop`;
+    return `https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=300&h=450&fit=crop`;
   };
   
   const posterUrl = getImageUrl();
@@ -32,7 +32,7 @@ const MovieCard = ({ movie, compact, showRating = true }) => {
             onLoad={() => setImageLoaded(true)}
             onError={(e) => {
               setImageError(true);
-              e.target.src = 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300&h=450&fit=crop';
+              e.target.src = 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=300&h=450&fit=crop';
               setImageLoaded(true);
             }}
           />

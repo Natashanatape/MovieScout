@@ -31,6 +31,7 @@ const miscRoutes = require('./routes/misc');
 const phase4Routes = require('./routes/phase4');
 const proRoutes = require('./routes/pro');
 const adminRoutes = require('./routes/admin');
+const activitiesRoutes = require('./routes/activities');
 
 const app = express();
 
@@ -81,6 +82,7 @@ app.use('/api/misc', miscRoutes);
 app.use('/api/phase4', phase4Routes);
 app.use('/api/pro', proRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/activities', activitiesRoutes);
 
 // Serve uploaded files
 app.use('/uploads', express.static('uploads'));
@@ -107,7 +109,7 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 5000;
 
 // Run migrations on startup
-runMigrations().then(() => {
+// runMigrations().then(() => {
   app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
     console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
@@ -116,6 +118,6 @@ runMigrations().then(() => {
     initReminderJobs();
     console.log('⏰ Reminder cron jobs initialized');
   });
-});
+
 
 module.exports = app;
